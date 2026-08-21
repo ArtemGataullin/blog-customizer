@@ -5,11 +5,12 @@ import plane from 'src/images/plane.png';
 import { Text } from 'src/ui/text';
 
 import styles from './Article.module.scss';
+// import { defaultArticleState } from './../../constants/articleProps';
 
 export const Article = () => {
 	return (
 		<article className={clsx(styles.article)}>
-			<Text as='h1' size={45} weight={800} uppercase dynamicLite>
+			<Text as='h1' size={18} weight={800} uppercase dynamicLite>
 				Портрет Западной Швейцарии
 			</Text>
 			<div className={styles.titleDescription}>
