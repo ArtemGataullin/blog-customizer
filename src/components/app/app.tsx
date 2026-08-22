@@ -1,26 +1,35 @@
-import { CSSProperties } from 'react';
+import { CSSProperties, useState } from 'react';
 import clsx from 'clsx';
 
 import { Article } from '../article/Article';
 import { ArticleParamsForm } from '../article-params-form/ArticleParamsForm';
-import { defaultArticleState } from './../../constants/articleProps';
+import {
+	defaultArticleState,
+	ArticleStateType,
+} from './../../constants/articleProps';
 
 import styles from './app.module.scss';
 
 export const App = () => {
+	const [pageSelectedOptionsState, setPageSelectedOptionsState] =
+		useState<ArticleStateType>(defaultArticleState);
+
 	return (
 		<main
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': defaultArticleState.fontFamilyOption.value,
-					'--font-size': defaultArticleState.fontSizeOption.value,
-					'--font-color': defaultArticleState.fontColor.value,
-					'--container-width': defaultArticleState.contentWidth.value,
-					'--bg-color': defaultArticleState.backgroundColor.value,
+					'--font-family': pageSelectedOptionsState.fontFamilyOption.value,
+					'--font-size': pageSelectedOptionsState.fontSizeOption.value,
+					'--font-color': pageSelectedOptionsState.fontColor.value,
+					'--container-width': pageSelectedOptionsState.contentWidth.value,
+					'--bg-color': pageSelectedOptionsState.backgroundColor.value,
 				} as CSSProperties
 			}>
-			<ArticleParamsForm />
+			<ArticleParamsForm
+				onApply={setPageSelectedOptionsState}
+				onReset={() => setPageSelectedOptionsState(defaultArticleState)}
+			/>
 			<Article />
 		</main>
 	);
