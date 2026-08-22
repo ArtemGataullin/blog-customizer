@@ -6,7 +6,7 @@ type RadioGroupFontSizeProps = {
 	onChange: (option: OptionType) => void;
 };
 
-export const RadioGroupFontSize = ({
+export const FontSizeRadioGroup = ({
 	selected,
 	onChange,
 }: RadioGroupFontSizeProps) => {

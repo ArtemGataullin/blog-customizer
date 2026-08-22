@@ -6,7 +6,7 @@ type SelectedBackgroundColorProps = {
 	onChange: (option: OptionType) => void;
 };
 
-export const SelectedBackgroundColors = ({
+export const BackgroundColorSelect = ({
 	selected,
 	onChange,
 }: SelectedBackgroundColorProps) => {

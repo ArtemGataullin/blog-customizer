@@ -11,7 +11,7 @@ import {
 import styles from './app.module.scss';
 
 export const App = () => {
-	const [pageState, setPageState] =
+	const [pageSelectedOptionsState, setPageSelectedOptionsState] =
 		useState<ArticleStateType>(defaultArticleState);
 
 	return (
@@ -19,16 +19,16 @@ export const App = () => {
 			className={clsx(styles.main)}
 			style={
 				{
-					'--font-family': pageState.fontFamilyOption.value,
-					'--font-size': pageState.fontSizeOption.value,
-					'--font-color': pageState.fontColor.value,
-					'--container-width': pageState.contentWidth.value,
-					'--bg-color': pageState.backgroundColor.value,
+					'--font-family': pageSelectedOptionsState.fontFamilyOption.value,
+					'--font-size': pageSelectedOptionsState.fontSizeOption.value,
+					'--font-color': pageSelectedOptionsState.fontColor.value,
+					'--container-width': pageSelectedOptionsState.contentWidth.value,
+					'--bg-color': pageSelectedOptionsState.backgroundColor.value,
 				} as CSSProperties
 			}>
 			<ArticleParamsForm
-				onApply={setPageState}
-				onReset={() => setPageState(defaultArticleState)}
+				onApply={setPageSelectedOptionsState}
+				onReset={() => setPageSelectedOptionsState(defaultArticleState)}
 			/>
 			<Article />
 		</main>

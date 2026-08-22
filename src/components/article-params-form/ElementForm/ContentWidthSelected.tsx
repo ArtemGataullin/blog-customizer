@@ -6,7 +6,7 @@ type SelectedContentWidthProps = {
 	onChange: (option: OptionType) => void;
 };
 
-export const SelectedContentWidth = ({
+export const ContentWidthSelected = ({
 	selected,
 	onChange,
 }: SelectedContentWidthProps) => {

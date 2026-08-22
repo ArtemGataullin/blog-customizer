@@ -6,7 +6,7 @@ type SelectedFontColorProps = {
 	onChange: (option: OptionType) => void;
 };
 
-export const SelectedFontColors = ({
+export const FontColorSelect = ({
 	selected,
 	onChange,
 }: SelectedFontColorProps) => {

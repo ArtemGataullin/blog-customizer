@@ -6,7 +6,7 @@ type SelectedFontProps = {
 	onChange: (option: OptionType) => void;
 };
 
-export const SelectedFont = ({ selected, onChange }: SelectedFontProps) => {
+export const FontSelect = ({ selected, onChange }: SelectedFontProps) => {
 	return (
 		<Select
 			selected={selected}

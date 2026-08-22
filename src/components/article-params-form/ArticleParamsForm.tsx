@@ -1,15 +1,15 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { ArrowButton } from 'src/ui/arrow-button';
 import { Button } from 'src/ui/button';
 import { Separator } from 'src/ui/separator';
 import clsx from 'clsx';
 
 import styles from './ArticleParamsForm.module.scss';
-import { SelectedFont } from 'src/components/article-params-form/ElementForm/SelectFont';
-import { RadioGroupFontSize } from 'src/components/article-params-form/ElementForm/RadioGroupFontSize';
-import { SelectedFontColors } from 'src/components/article-params-form/ElementForm/SelectedFontColor';
-import { SelectedBackgroundColors } from 'src/components/article-params-form/ElementForm/SelectedBackgroundColor';
-import { SelectedContentWidth } from 'src/components/article-params-form/ElementForm/SelectedContentWidth';
+import { FontSelect } from 'src/components/article-params-form/ElementForm/FontSelect';
+import { FontSizeRadioGroup } from 'src/components/article-params-form/ElementForm/FontSizeRadioGroup';
+import { FontColorSelect } from 'src/components/article-params-form/ElementForm/FontColorSelect';
+import { BackgroundColorSelect } from 'src/components/article-params-form/ElementForm/BackgroundColorSelect';
+import { ContentWidthSelected } from 'src/components/article-params-form/ElementForm/ContentWidthSelected';
 
 import {
 	defaultArticleState,
@@ -25,16 +25,49 @@ export const ArticleParamsForm = ({
 	onApply,
 	onReset,
 }: ArticleParamsFormProps) => {
-	const [isOpen, setIsOpen] = useState(false);
+	const [isFormOpen, setIsFormOpen] = useState(false);
 	const [formState, setFormState] =
 		useState<ArticleStateType>(defaultArticleState);
-	const toggleMenu = () => {
-		setIsOpen((isOpen) => !isOpen);
+	const sidebarRef = useRef<HTMLDivElement>(null);
+	const toggleSidebar = () => {
+		setIsFormOpen((isFormOpen) => !isFormOpen);
 	};
+	const closeSidebar = () => {
+		setIsFormOpen(false);
+	};
+	useEffect(() => {
+		const handleClickOutside = (e: MouseEvent) => {
+			if (
+				sidebarRef.current &&
+				!sidebarRef.current.contains(e.target as Node)
+			) {
+				closeSidebar();
+			}
+		};
+		if (isFormOpen) {
+			document.addEventListener('mousedown', handleClickOutside);
+		}
+		return () => {
+			document.removeEventListener('mousedown', handleClickOutside);
+		};
+	}, [isFormOpen]);
+	useEffect(() => {
+		const handleEscape = (e: KeyboardEvent) => {
+			if (e.key === 'Escape' && isFormOpen) {
+				closeSidebar();
+			}
+		};
+		if (isFormOpen) {
+			document.addEventListener('keydown', handleEscape);
+		}
+		return () => {
+			document.removeEventListener('keydown', handleEscape);
+		};
+	}, [isFormOpen]);
 	const handleApply = (e: React.FormEvent) => {
 		e.preventDefault();
 		onApply(formState);
-		setIsOpen(false);
+		closeSidebar();
 	};
 
 	const handleReset = () => {
@@ -51,39 +84,40 @@ export const ArticleParamsForm = ({
 
 	return (
 		<>
-			<ArrowButton isOpen={isOpen} onClick={toggleMenu} />
+			<ArrowButton isOpen={isFormOpen} onClick={toggleSidebar} />
 			<aside
-				className={clsx(styles.container, { [styles.container_open]: isOpen })}>
-				<form className={styles.form} onSubmit={handleApply}>
+				ref={sidebarRef}
+				className={clsx(styles.container, {
+					[styles.container_open]: isFormOpen,
+				})}>
+				<form
+					className={styles.form}
+					onSubmit={handleApply}
+					onReset={handleReset}>
 					<h1 className={styles.title__form}>Задайте Параметры</h1>
-					<SelectedFont
+					<FontSelect
 						selected={formState.fontFamilyOption}
 						onChange={(option) => updateFormState('fontFamilyOption', option)}
 					/>
-					<RadioGroupFontSize
+					<FontSizeRadioGroup
 						selected={formState.fontSizeOption}
 						onChange={(option) => updateFormState('fontSizeOption', option)}
 					/>
-					<SelectedFontColors
+					<FontColorSelect
 						selected={formState.fontColor}
 						onChange={(option) => updateFormState('fontColor', option)}
 					/>
 					<Separator />
-					<SelectedBackgroundColors
+					<BackgroundColorSelect
 						selected={formState.backgroundColor}
 						onChange={(option) => updateFormState('backgroundColor', option)}
 					/>
-					<SelectedContentWidth
+					<ContentWidthSelected
 						selected={formState.contentWidth}
 						onChange={(option) => updateFormState('contentWidth', option)}
 					/>
 					<div className={styles.bottomContainer}>
-						<Button
-							title='Сбросить'
-							htmlType='reset'
-							type='clear'
-							onClick={handleReset}
-						/>
+						<Button title='Сбросить' htmlType='reset' type='clear' />
 						<Button title='Применить' htmlType='submit' type='apply' />
 					</div>
 				</form>
